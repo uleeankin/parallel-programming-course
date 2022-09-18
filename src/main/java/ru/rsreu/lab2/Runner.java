@@ -9,7 +9,7 @@ public class Runner {
 
         long starTime = System.currentTimeMillis();
         InfiniteSeriesSumCalculator calculator = new InfiniteSeriesSumCalculator(1E-14);
-        double result = calculator.calculate(1, Long.MAX_VALUE, new InfinityConvergentSeriesPredicate());
+        double result = calculator.calculate(1, new InfinityConvergentSeriesPredicate());
         long endTime = System.currentTimeMillis();
 
         System.out.println("Calculation result: " + result);

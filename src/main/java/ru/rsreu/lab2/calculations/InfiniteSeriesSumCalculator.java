@@ -10,24 +10,16 @@ public class InfiniteSeriesSumCalculator {
         this.inaccuracy = inaccuracy;
     }
 
-    public double calculate(long lowerBound, long upperBound, Predicate predicate) {
-
-        if (lowerBound > upperBound) {
-            throw new IllegalArgumentException("Upper bound must be more then lower one!");
-        }
+    public double calculate(long lowerBound, Predicate predicate) {
 
         if (lowerBound <= 0) {
             throw new IllegalArgumentException("Function argument must be natural number");
         }
 
-        if (lowerBound == upperBound) {
-            return predicate.calculate(lowerBound);
-        }
-
-        return calculateInfiniteSeriesSum(lowerBound, upperBound, predicate);
+        return calculateInfiniteSeriesSum(lowerBound, predicate);
     }
 
-    private double calculateInfiniteSeriesSum(long lowerBound, long upperBound, Predicate predicate) {
+    private double calculateInfiniteSeriesSum(long lowerBound, Predicate predicate) {
         double result = 0;
         long argument = lowerBound;
         double functionResult;
@@ -36,9 +28,7 @@ public class InfiniteSeriesSumCalculator {
             functionResult = predicate.calculate(argument);
             result += functionResult;
             argument++;
-
-        } while (Math.abs(functionResult) > this.inaccuracy
-                && argument < upperBound);
+        } while (Math.abs(functionResult) > this.inaccuracy);
 
         return result;
     }
