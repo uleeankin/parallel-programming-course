@@ -1,6 +1,7 @@
 package ru.rsreu.lab2.calculations;
 
-import ru.rsreu.lab2.predicates.Predicate;
+
+import java.util.function.Function;
 
 public class InfiniteSeriesSumCalculator {
 
@@ -10,7 +11,7 @@ public class InfiniteSeriesSumCalculator {
         this.inaccuracy = inaccuracy;
     }
 
-    public double calculate(long lowerBound, Predicate predicate) {
+    public double calculate(long lowerBound, Function<Long, Double> predicate) {
 
         if (lowerBound <= 0) {
             throw new IllegalArgumentException("Function argument must be natural number");
@@ -19,16 +20,13 @@ public class InfiniteSeriesSumCalculator {
         return calculateInfiniteSeriesSum(lowerBound, predicate);
     }
 
-    private double calculateInfiniteSeriesSum(long lowerBound, Predicate predicate) {
+    private double calculateInfiniteSeriesSum(long lowerBound, Function<Long, Double> predicate) {
         double result = 0;
-        long argument = lowerBound;
-        double functionResult;
+        long argument;
 
-        do {
-            functionResult = predicate.calculate(argument);
-            result += functionResult;
-            argument++;
-        } while (Math.abs(functionResult) > this.inaccuracy);
+        for (argument = lowerBound; argument <= this.inaccuracy; argument++) {
+            result += predicate.apply(argument);
+        }
 
         return result;
     }
