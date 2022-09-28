@@ -1,18 +1,18 @@
 package ru.rsreu.lab3.calculations;
 
-import ru.rsreu.lab3.predicates.InfinityConvergentSeriesPredicate;
-import ru.rsreu.lab3.predicates.Predicate;
+
+import java.util.function.Function;
 
 public class InfiniteSeriesSumCalculator {
 
-    private final double inaccuracy;
+    private final long inaccuracy;
     private final int LOGS_NUM = 20;
 
-    public InfiniteSeriesSumCalculator(double inaccuracy) {
+    public InfiniteSeriesSumCalculator(long inaccuracy) {
         this.inaccuracy = inaccuracy;
     }
 
-    public double calculate(long lowerBound, Predicate predicate) {
+    public double calculate(long lowerBound, Function<Long, Double> predicate) {
         if (lowerBound <= 0) {
             throw new IllegalArgumentException("Function argument must be natural number");
         }
@@ -20,27 +20,24 @@ public class InfiniteSeriesSumCalculator {
         return calculateInfiniteSeriesSum(lowerBound, predicate);
     }
 
-    private double calculateInfiniteSeriesSum(long lowerBound, Predicate predicate) {
+    private double calculateInfiniteSeriesSum(long lowerBound, Function<Long, Double> predicate) {
         double result = 0;
-        long argument = lowerBound;
-        double functionResult;
-        long iterationsNumber = getIterationsNumber();
+        long argument;
+        int logsFrequency = getLogsFrequency();
 
-        do {
-            functionResult = predicate.calculate(argument);
-            result += functionResult;
-            if (argument % (iterationsNumber / LOGS_NUM) == 0) {
+        for (argument = lowerBound; argument <= this.inaccuracy; argument++) {
+            result += predicate.apply(argument);
+            if (argument % logsFrequency == 0) {
                 System.out.printf("Calculation progress: %.0f%%/100%%\n",
-                                        getCalculationProgress(argument, iterationsNumber));
+                        getCalculationProgress(argument, this.inaccuracy));
             }
-            argument++;
-        } while (Math.abs(functionResult) > this.inaccuracy);
+        }
 
         return result;
     }
 
-    private long getIterationsNumber() {
-        return Math.round(Math.sqrt(1 / (this.inaccuracy)) - 1);
+    private int getLogsFrequency() {
+        return (int) this.inaccuracy / this.LOGS_NUM;
     }
 
     private double getCalculationProgress(long argument, long iterationsNumber) {

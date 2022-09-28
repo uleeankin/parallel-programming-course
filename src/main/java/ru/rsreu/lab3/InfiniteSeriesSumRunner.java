@@ -1,21 +1,21 @@
 package ru.rsreu.lab3;
 
 import ru.rsreu.lab3.calculations.InfiniteSeriesSumCalculator;
-import ru.rsreu.lab3.predicates.InfinityConvergentSeriesPredicate;
+
+import java.util.function.Function;
 
 public class InfiniteSeriesSumRunner implements Runnable {
 
     private InfiniteSeriesSumCalculator calculator;
     private long lowerBound;
-    private InfinityConvergentSeriesPredicate predicate;
+    private Function<Long, Double> predicate;
     private double infiniteSeriesSum;
 
     public InfiniteSeriesSumRunner(InfiniteSeriesSumCalculator calculator,
-                                   long lowerBound,
-                                   InfinityConvergentSeriesPredicate predicate) {
+                                   long lowerBound, Function<Long, Double> function) {
         this.calculator = calculator;
         this.lowerBound = lowerBound;
-        this.predicate = predicate;
+        this.predicate = function;
     }
 
     @Override
