@@ -15,9 +15,19 @@ public class InfiniteSeriesSumRunner implements Runnable {
         this.lowerBound = lowerBound;
     }
 
+    public InfiniteSeriesSumRunner(InfiniteSeriesSumCalculator calculator) {
+        this.calculator = calculator;
+        this.lowerBound = 1;
+    }
+
     @Override
     public void run() {
-        infiniteSeriesSum = calculator.calculate(lowerBound, predicate);
+        try {
+            infiniteSeriesSum = calculator.calculate(lowerBound, predicate);
+        } catch (InterruptedException exception) {
+            System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
+        }
+
     }
 
     public double getInfiniteSeriesSum() {
