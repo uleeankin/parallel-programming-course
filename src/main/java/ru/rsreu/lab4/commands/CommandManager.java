@@ -31,24 +31,30 @@ public class CommandManager {
     }
 
     public void stop(long n) {
-        if (this.getThreadById(n).isAlive()) {
-            this.getThreadById(n).interrupt();
-        } else {
-            System.out.printf("Thread <%s> isn't alive and can't be stopped%n",
-                                this.getThreadById(n).getName());
+        try {
+            if (this.getThreadById(n).isAlive()) {
+                this.getThreadById(n).interrupt();
+            } else {
+                System.out.printf("Thread <%s> isn't alive and can't be stopped%n",
+                        this.getThreadById(n).getName());
+            }
+        } catch (NullPointerException ignored) {
         }
 
     }
 
     public void await(long n) {
-        if (this.getThreadById(n).isAlive()) {
-            try {
-                this.getThreadById(n).join();
-            } catch (InterruptedException ignored) {
+        try {
+            if (this.getThreadById(n).isAlive()) {
+                try {
+                    this.getThreadById(n).join();
+                } catch (InterruptedException ignored) {
+                }
+            } else {
+                System.out.printf("Thread <%s> isn't alive and can't be awaited%n",
+                                    this.getThreadById(n).getName());
             }
-        } else {
-            System.out.printf("Thread <%s> isn't alive and can't be awaited%n",
-                                this.getThreadById(n).getName());
+        } catch(NullPointerException ignored) {
         }
     }
 
@@ -62,7 +68,8 @@ public class CommandManager {
         if (thread != null) {
             return thread;
         } else {
-            throw new RuntimeException(String.format("Thread executing task with id %d is not found", threadId));
+            System.out.println(String.format("Thread executing task with id %d is not found", threadId));
+            return null;
         }
     }
 }

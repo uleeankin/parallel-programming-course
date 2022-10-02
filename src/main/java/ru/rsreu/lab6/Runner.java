@@ -4,27 +4,25 @@ import java.util.concurrent.*;
 
 public class Runner {
 
-    private static final long TASKS_NUMBER = 100;
-    private static final long INACCURACY = 10000000L;
+    private static final int THREADS_NUMBER = 10;
+    private static final int TASKS_NUMBER = 100;
+    private static final long INACCURACY = 50000000L;
 
     public static void main(String[] args) {
 
-        ExecutorService executor = Executors.newFixedThreadPool(
-                            Runtime.getRuntime().availableProcessors() * 2);
+        ExecutorService executor = Executors.newFixedThreadPool(THREADS_NUMBER);
         try {
             long startTime = System.currentTimeMillis();
 
             double result = new CalculationsExecutor(executor,
                                     TASKS_NUMBER, INACCURACY)
-                            .execute();
+                                .execute();
 
             System.out.printf("Calculation time: %.3fs\n", ((System.currentTimeMillis() - startTime)/1000.0));
-
             terminateExecutorService(executor);
+            System.out.println("Calculation result = " + result);
 
-            System.out.printf("Calculation result = %f\n", result);
-
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             System.err.println("Execution was interrupted");
         } finally {
             shutDownExecutorService(executor);

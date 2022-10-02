@@ -40,7 +40,7 @@ public class ExecutionController {
             case EXIT:
                 return commander.exit();
             case UNKNOWN:
-                throw new IllegalArgumentException("Unknown command");
+                System.out.println("Unknown command");
         }
 
         return true;
