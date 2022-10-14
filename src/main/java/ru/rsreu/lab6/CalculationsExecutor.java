@@ -45,22 +45,27 @@ public class CalculationsExecutor {
 
     private Thread startProgressCheck(ExecutorService executor, List<Future<Double>> futures) {
         Thread progressChecker = new Thread(() -> {
+            long showedTasks =  -1;
             while(!executor.isShutdown()) {
                 long finishedTasks = futures.stream().filter(Future::isDone).count();
-                System.out.printf("Calculation progress: %.0f%%/100%%%n",
-                                    finishedTasks * 100.0 / futures.size());
+                if (showedTasks != finishedTasks) {
+                    System.out.printf("Calculation progress: %.0f%%/100%%%n",
+                            finishedTasks * 100.0 / futures.size());
+                    showedTasks = finishedTasks;
+                }
                 try {
                     Thread.sleep(progressOutputFrequency);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e.getMessage());
+                    e.printStackTrace();
                 }
             }
+            System.out.println("Calculation progress: 100%/100%");
         });
         progressChecker.start();
         return progressChecker;
     }
 
     private long getOutputFrequency(long inaccuracy) {
-        return Long.parseLong(Long.toString(inaccuracy).substring(0, 3));
+        return Long.parseLong(Long.toString(inaccuracy).substring(0, 3)) / 2;
     }
 }

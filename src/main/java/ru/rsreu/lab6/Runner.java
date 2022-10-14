@@ -4,18 +4,19 @@ import java.util.concurrent.*;
 
 public class Runner {
 
-    private static final int THREADS_NUMBER = 10;
-    private static final int TASKS_NUMBER = 100;
-    private static final long INACCURACY = 50000000L;
+    private static int tasksNumber = 10;
+    private static final long INACCURACY = 100000000L;
 
     public static void main(String[] args) {
 
-        ExecutorService executor = Executors.newFixedThreadPool(THREADS_NUMBER);
+        int threadsNumber = Runtime.getRuntime().availableProcessors() * 2;
+        tasksNumber = threadsNumber;
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
         try {
             long startTime = System.currentTimeMillis();
 
             double result = new CalculationsExecutor(executor,
-                                    TASKS_NUMBER, INACCURACY)
+                                    tasksNumber, INACCURACY)
                                 .execute();
 
             System.out.printf("Calculation time: %.3fs\n", ((System.currentTimeMillis() - startTime)/1000.0));
