@@ -1,6 +1,5 @@
 package ru.rsreu.lab5;
 
-import ru.rsreu.lab5.storage.LazySharedStorage;
 import ru.rsreu.lab5.storage.SharedStorage;
 
 import java.io.BufferedReader;

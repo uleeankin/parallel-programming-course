@@ -1,22 +1,20 @@
-package ru.rsreu.lab6;
+package ru.rsreu.lab7;
 
 import java.util.concurrent.*;
 
 public class Runner {
 
-    private static int tasksNumber = 10;
-    private static final long INACCURACY = 100000000L;
+    private static final long INACCURACY = 50000000L;
 
     public static void main(String[] args) {
 
-        int threadsNumber = Runtime.getRuntime().availableProcessors() * 2;
-        tasksNumber = threadsNumber;
+        int threadsNumber = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
         try {
             long startTime = System.currentTimeMillis();
 
             double result = new CalculationsExecutor(executor,
-                                    tasksNumber, INACCURACY)
+                                    threadsNumber, INACCURACY)
                                 .execute();
 
             System.out.printf("Calculation time: %.3fs\n", ((System.currentTimeMillis() - startTime)/1000.0));

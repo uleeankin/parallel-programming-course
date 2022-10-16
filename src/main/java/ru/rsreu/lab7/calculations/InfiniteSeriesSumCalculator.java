@@ -1,13 +1,17 @@
-package ru.rsreu.lab6.calculations;
+package ru.rsreu.lab7.calculations;
+
+import ru.rsreu.lab7.logs.ProgressLogger;
 
 import java.util.function.Function;
 
 public class InfiniteSeriesSumCalculator {
 
     private final long iterationsNumber;
+    private final ProgressLogger logger;
 
-    public InfiniteSeriesSumCalculator(long inaccuracy) {
+    public InfiniteSeriesSumCalculator(long inaccuracy, ProgressLogger logger) {
         this.iterationsNumber = inaccuracy;
+        this.logger = logger;
     }
 
     public double calculate(long lowerBound, Function<Long, Double> predicate)
@@ -25,8 +29,10 @@ public class InfiniteSeriesSumCalculator {
 
         for (argument = lowerBound; argument <= this.iterationsNumber; argument++) {
             result += predicate.apply(argument);
+            //this.logger.getProgress(1);
         }
 
+        this.logger.getProgress(this.iterationsNumber - lowerBound);
         return result;
     }
 
