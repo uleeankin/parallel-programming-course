@@ -7,7 +7,7 @@ import java.util.List;
 
 public class LazySharedStorage implements SharedStorage {
 
-    private List<WhitespacePosition> sharedStorage;
+    private volatile List<WhitespacePosition> sharedStorage;
 
     @Override
     public synchronized List<WhitespacePosition> getSharedStorage() {

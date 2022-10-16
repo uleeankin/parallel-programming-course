@@ -1,6 +1,4 @@
-package ru.rsreu.lab7.logs;
-
-import java.util.concurrent.locks.ReentrantLock;
+package ru.rsreu.lab5_1.logs;
 
 public class ProgressLogger {
 
@@ -8,8 +6,6 @@ public class ProgressLogger {
     private final int logsNumber;
     private final long logsFrequency;
     private long currentIterationsNumber = 0;
-
-    private final ReentrantLock reentrantLock = new ReentrantLock();
 
     public ProgressLogger(long iterationsNumber, int logsNumber) {
         this.iterationsNumber = iterationsNumber;
@@ -23,14 +19,12 @@ public class ProgressLogger {
         this.logsFrequency = this.getLogsFrequency(this.iterationsNumber, this.logsNumber);
     }
 
-    public void getProgress(long argument) {
-        this.reentrantLock.lock();
+    public synchronized void getProgress(long argument) {
         this.currentIterationsNumber += argument;
         if (this.currentIterationsNumber % this.logsFrequency == 0) {
             System.out.printf("Calculation progress: %.0f%%/100%%%n",
                     getCalculationProgress(this.currentIterationsNumber, this.iterationsNumber));
         }
-        this.reentrantLock.unlock();
     }
 
     private long getLogsFrequency(long iterationsNumber, int logsNumber) {
