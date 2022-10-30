@@ -17,7 +17,7 @@ public class Runner {
                                     threadsNumber, INACCURACY)
                                 .execute();
 
-            System.out.printf("Calculation time: %.3fs\n", ((System.currentTimeMillis() - startTime)/1000.0));
+            System.out.printf("Calculation time: %.3f s\n", ((System.currentTimeMillis() - startTime)/1000.0));
             terminateExecutorService(executor);
             System.out.println("Calculation result = " + result);
 

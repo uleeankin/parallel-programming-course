@@ -1,6 +1,7 @@
 package ru.rsreu.lab7;
 
 import ru.rsreu.lab7.calculations.InfiniteSeriesSumRunner;
+import ru.rsreu.lab7.realisation.Semaphore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,9 @@ public class CalculationsExecutor {
 
     public CalculationsExecutor(ExecutorService executor, int tasksNumber, long inaccuracy) {
         this.executor = executor;
+        System.out.println(tasksNumber / 2);
         this.tasks = new TaskService().getTasks(tasksNumber, inaccuracy,
-                            new Semaphore(tasksNumber / 2, true),
+                            new Semaphore(tasksNumber / 2),
                             new CountDownLatch(tasksNumber));
     }
 

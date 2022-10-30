@@ -7,15 +7,18 @@ import java.util.function.Function;
 public class InfiniteSeriesSumCalculator {
 
     private final long iterationsNumber;
-    private final ProgressLogger logger;
+    private ProgressLogger logger = new ProgressLogger(0);
 
     public InfiniteSeriesSumCalculator(long inaccuracy, ProgressLogger logger) {
         this.iterationsNumber = inaccuracy;
         this.logger = logger;
     }
 
-    public double calculate(long lowerBound, Function<Long, Double> predicate)
-            throws InterruptedException{
+    public InfiniteSeriesSumCalculator(long inaccuracy) {
+        this.iterationsNumber = inaccuracy;
+    }
+
+    public double calculate(long lowerBound, Function<Long, Double> predicate) {
         if (lowerBound <= 0) {
             throw new IllegalArgumentException("Function argument must be natural number");
         }
@@ -23,7 +26,7 @@ public class InfiniteSeriesSumCalculator {
         return calculateInfiniteSeriesSum(lowerBound, predicate);
     }
 
-    private double calculateInfiniteSeriesSum(long lowerBound, Function<Long, Double> predicate) {
+    private double calculateInfiniteSeriesSum(long lowerBound, Function<Long, Double> predicate){
         double result = 0;
         long argument;
 
@@ -32,7 +35,7 @@ public class InfiniteSeriesSumCalculator {
             //this.logger.getProgress(1);
         }
 
-        this.logger.getProgress(this.iterationsNumber - lowerBound);
+        //this.logger.getProgress(this.iterationsNumber - lowerBound);
         return result;
     }
 

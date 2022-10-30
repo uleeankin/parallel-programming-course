@@ -3,11 +3,11 @@ package ru.rsreu.lab7;
 import ru.rsreu.lab7.calculations.InfiniteSeriesSumCalculator;
 import ru.rsreu.lab7.calculations.InfiniteSeriesSumRunner;
 import ru.rsreu.lab7.logs.ProgressLogger;
+import ru.rsreu.lab7.realisation.Semaphore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 
 public class TaskService {
 
@@ -43,3 +43,4 @@ public class TaskService {
         return tasks;
     }
 }
+

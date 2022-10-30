@@ -1,8 +1,9 @@
 package ru.rsreu.lab7.calculations;
 
+import ru.rsreu.lab7.realisation.Semaphore;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -34,14 +35,23 @@ public class InfiniteSeriesSumRunner implements Callable<Double> {
         try {
             this.semaphore.acquire();
             this.infiniteSeriesSum = calculator.calculate(lowerBound, predicate);
-            this.semaphore.release();
-            this.latch.countDown();
-            this.getTime(System.currentTimeMillis());
         } catch (InterruptedException exception) {
             System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
+        } finally {
+            this.semaphore.release();
+            this.startCountTimeAfterEnd();
         }
 
         return this.infiniteSeriesSum;
+    }
+
+    private void startCountTimeAfterEnd() {
+        this.latch.countDown();
+        try {
+            this.getTime(System.currentTimeMillis());
+        } catch (InterruptedException e) {
+            System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
+        }
     }
 
     private void getTime(long startTime) throws InterruptedException {
