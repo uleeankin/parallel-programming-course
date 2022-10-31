@@ -2,7 +2,6 @@ package ru.rsreu;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ru.rsreu.lab7.calculations.InfiniteSeriesSumCalculator;
 import ru.rsreu.lab7.realisation.Semaphore;
 
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ public class SemaphoreTester {
     private static final List<Thread> tasks = new ArrayList<>();
     private static final Semaphore semaphore =
             new Semaphore(Runtime.getRuntime().availableProcessors() / 2);
-    private static final TestTaskRunner task = new TestTaskRunner(
-            new InfiniteSeriesSumCalculator(2500000));
     private static final int threadsNumber = Runtime.getRuntime().availableProcessors();
 
     @Test
@@ -29,19 +26,18 @@ public class SemaphoreTester {
                 try {
                     semaphore.acquire();
                     counter.getAndIncrement();
-                    task.run();
                 } catch (InterruptedException e) {
                     System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
                 } finally {
                     semaphore.release();
-                    counter.getAndDecrement();
+                    //counter.getAndDecrement();
                     latch.countDown();
                 }
             }).start();
         }
 
         latch.await();
-        Assert.assertEquals(0, counter.get());
+        Assert.assertEquals(threadsNumber, counter.get());
     }
 
     @Test
@@ -58,7 +54,6 @@ public class SemaphoreTester {
                         counter.getAndIncrement();
                     }
                     threadsNumberInSemaphoreLatch.countDown();
-                    task.run();
                 } catch (InterruptedException e) {
                     System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
                 } finally {
@@ -86,8 +81,8 @@ public class SemaphoreTester {
                     semaphore.acquire();
                     if (threadsNumberInSemaphoreLatch.getCount() > 0) {
                         counter.getAndIncrement();
-                    }threadsNumberInSemaphoreLatch.countDown();
-                    task.run();
+                    }
+                    threadsNumberInSemaphoreLatch.countDown();
                 } catch (InterruptedException e) {
                     System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
                 } finally {
@@ -113,7 +108,6 @@ public class SemaphoreTester {
                 try {
                     semaphore.acquire();
                     counter.getAndIncrement();
-                    task.run();
                 } catch (InterruptedException e) {
                     System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
                 } finally {
@@ -144,7 +138,6 @@ public class SemaphoreTester {
                     if (tryAcquireResult) {
                         counter.getAndIncrement();
                     }
-                    task.run();
                 } finally {
                     semaphore.release();
                     if (tryAcquireResult) {
@@ -173,7 +166,6 @@ public class SemaphoreTester {
                         counter.getAndIncrement();
                     }
                     threadsNumberInSemaphoreLatch.countDown();
-                    task.run();
                 } finally {
                     semaphore.release();
                     latch.countDown();

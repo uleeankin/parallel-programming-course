@@ -1,7 +1,5 @@
 package ru.rsreu.lab7.realisation;
 
-import java.util.concurrent.TimeUnit;
-
 public class Semaphore {
 
     private final Object lock = new Object();
@@ -34,15 +32,14 @@ public class Semaphore {
     }
 
     public boolean tryAcquire() {
-        if (this.currentPermits + 1 <= this.permits) {
-            synchronized (lock) {
-                if (this.currentPermits + 1 <= this.permits) {
-                    this.currentPermits++;
-                    return true;
-                }
+        synchronized (lock) {
+            if (this.currentPermits + 1 <= this.permits) {
+                this.currentPermits++;
+                return true;
+            } else {
+                return false;
             }
         }
-        return false;
     }
 
 }

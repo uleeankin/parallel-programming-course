@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SemaphoreWorkPresentator {
 
-    private static final List<Thread> tasks = new ArrayList<>();
     private static final Semaphore semaphore =
             new Semaphore(Runtime.getRuntime().availableProcessors() / 2);
     private static final TestTaskRunner task = new TestTaskRunner(
@@ -28,15 +27,15 @@ public class SemaphoreWorkPresentator {
             Thread thread = new Thread(() -> {
                 try {
                     semaphore.acquire();
-                    System.out.println(Thread.currentThread().getName() + " start execution");
                     counter.getAndIncrement();
+                    System.out.println(Thread.currentThread().getName() + " start execution");
                     task.run();
                 } catch (InterruptedException e) {
                     System.out.printf("Thread <%s> was interrupted\n", Thread.currentThread().getName());
                 } finally {
                     semaphore.release();
-                    System.out.println(Thread.currentThread().getName() + " end execution");
                     counter.getAndDecrement();
+                    System.out.println(Thread.currentThread().getName() + " end execution");
                     latch.countDown();
                 }
             });
