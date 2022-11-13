@@ -6,7 +6,7 @@ import java.util.List;
 public class Shop {
 
     private List<ShopProduct> products = new ArrayList<>();
-    private double fundsAmount;
+    private double fundsAmount = 0;
 
     public Shop(List<ShopProduct> products, double fundsAmount) {
         this.products = products;
@@ -15,6 +15,10 @@ public class Shop {
 
     public Shop(double fundsAmount) {
         this.fundsAmount = fundsAmount;
+    }
+
+    public Shop() {
+
     }
 
     public List<ShopProduct> getProducts() {

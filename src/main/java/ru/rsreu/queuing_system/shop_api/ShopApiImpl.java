@@ -1,15 +1,26 @@
-package ru.rsreu.queuing_system.service.shop;
+package ru.rsreu.queuing_system.shop_api;
 
 import ru.rsreu.queuing_system.model.Client;
 import ru.rsreu.queuing_system.model.Product;
 import ru.rsreu.queuing_system.model.ShopProduct;
-import ru.rsreu.queuing_system.service.client.exception.ClientNotFoundException;
-import ru.rsreu.queuing_system.service.shop.exception.ProductExistsException;
-import ru.rsreu.queuing_system.service.shop.exception.ProductNotFoundException;
+import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
+import ru.rsreu.queuing_system.exception.shop.ProductExistsException;
+import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;
+import ru.rsreu.queuing_system.service.ClientService;
+import ru.rsreu.queuing_system.service.ShopService;
 
 import java.util.List;
 
-public class ShopImpl implements Shop {
+public class ShopApiImpl implements ShopApi {
+
+    ClientService clientService;
+    ShopService shopService;
+
+    public ShopApiImpl(ClientService clientService, ShopService shopService) {
+        this.clientService = clientService;
+        this.shopService = shopService;
+    }
+
     @Override
     public Client createClient(String name) {
         return null;

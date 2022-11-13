@@ -1,5 +1,7 @@
 package ru.rsreu.queuing_system.model;
 
+import java.util.Objects;
+
 public class Product {
 
     private String name;
@@ -20,5 +22,18 @@ public class Product {
 
     public ProductType getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(name, product.name) && type == product.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type);
     }
 }

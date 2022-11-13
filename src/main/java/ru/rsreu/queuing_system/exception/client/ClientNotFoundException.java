@@ -1,4 +1,4 @@
-package ru.rsreu.queuing_system.service.client.exception;
+package ru.rsreu.queuing_system.exception.client;
 
 public class ClientNotFoundException extends Exception {
 }
