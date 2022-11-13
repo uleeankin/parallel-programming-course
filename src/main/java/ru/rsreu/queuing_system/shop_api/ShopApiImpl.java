@@ -8,27 +8,27 @@ import ru.rsreu.queuing_system.model.ShopProduct;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.shop.ProductExistsException;
 import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;
-import ru.rsreu.queuing_system.service.ClientService;
-import ru.rsreu.queuing_system.service.ShopService;
+import ru.rsreu.queuing_system.repository.ClientRepository;
+import ru.rsreu.queuing_system.repository.ShopRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ShopApiImpl implements ShopApi {
 
-    ClientService clientService;
-    ShopService shopService;
+    ClientRepository clientRepository;
+    ShopRepository shopRepository;
 
-    public ShopApiImpl(ClientService clientService, ShopService shopService) {
-        this.clientService = clientService;
-        this.shopService = shopService;
+    public ShopApiImpl(ClientRepository clientRepository, ShopRepository shopRepository) {
+        this.clientRepository = clientRepository;
+        this.shopRepository = shopRepository;
     }
 
     @Override
     public Client createClient(String name)
     {
         Client newClient = new Client(name);
-        this.clientService.addClient(newClient);
+        this.clientRepository.addClient(newClient);
         return newClient;
     }
 
@@ -36,7 +36,7 @@ public class ShopApiImpl implements ShopApi {
     public double getClientStatus(Client client)
             throws ClientNotFoundException {
 
-        Optional<Client> foundClient = clientService.getClient(client);
+        Optional<Client> foundClient = clientRepository.getClient(client);
         if (foundClient.isPresent()) {
             return foundClient.get().getSpentMoneyAmount();
         }
@@ -51,58 +51,59 @@ public class ShopApiImpl implements ShopApi {
             InsufficientProductAmountException,
             InsufficientFundsAmountException {
 
-        Client foundClient = this.findClient(client);
-        ShopProduct foundProduct = this.findProduct(product);
+        Optional<Client> foundClient = this.findClient(client);
+        Optional<ShopProduct> foundProduct = this.findProduct(product);
         double totalCost;
 
-        if (foundProduct.getAmount() < amount) {
+        if (foundProduct.get().getAmount() < amount) {
             throw new InsufficientProductAmountException();
         }
 
-        totalCost = amount * foundProduct.getPrice();
+        totalCost = amount * foundProduct.get().getPrice();
 
-        if (foundClient.getFundsAmount() < totalCost) {
+        if (foundClient.get().getFundsAmount() < totalCost) {
             throw new InsufficientFundsAmountException();
         }
 
-        this.shopService.updateProductAmount(foundProduct.getProduct(), amount,
+        this.shopRepository.updateProductAmount(foundProduct.get().getProduct(), amount,
                 (oldAmount, reservedAmount) -> oldAmount - reservedAmount);
 
-        this.clientService.updateFundsAmount(foundClient, totalCost,
+        this.clientRepository.updateFundsAmount(foundClient.get(), totalCost,
                 (fundsAmount, cost) -> fundsAmount - cost);
-        this.clientService.updateSpentMoney(foundClient, totalCost, Double::sum);
-        
-        this.shopService.updateFundsAmount(totalCost);
+        this.clientRepository.updateSpentMoney(foundClient.get(), totalCost, Double::sum);
+
+        this.shopRepository.updateFundsAmount(totalCost);
+
 
     }
 
-    private Client findClient(Client client)
+    private Optional<Client> findClient(Client client)
         throws ClientNotFoundException {
 
-        Optional<Client> foundClient = this.clientService.getClient(client);
+        Optional<Client> foundClient = this.clientRepository.getClient(client);
 
         if (!foundClient.isPresent()) {
             throw new ClientNotFoundException();
         }
-        return foundClient.get();
+        return foundClient;
     }
 
-    private ShopProduct findProduct(Product product)
+    private Optional<ShopProduct> findProduct(Product product)
             throws ProductNotFoundException {
 
-        Optional<ShopProduct> foundProduct = this.shopService.getProduct(product);
+        Optional<ShopProduct> foundProduct = this.shopRepository.getProduct(product);
 
         if (!foundProduct.isPresent()) {
             throw new ProductNotFoundException();
         }
-        return foundProduct.get();
+        return foundProduct;
     }
 
     @Override
     public void addProduct(Product product, int amount)
             throws ProductNotFoundException {
 
-        if (!this.shopService.updateProductAmount(product, amount, Integer::sum)) {
+        if (!this.shopRepository.updateProductAmount(product, amount, Integer::sum)) {
             throw new ProductNotFoundException();
         }
     }
@@ -111,13 +112,13 @@ public class ShopApiImpl implements ShopApi {
     public void createProduct(Product product, int amount, double price)
             throws ProductExistsException {
 
-        if (!this.shopService.addProduct(product, amount, price)) {
+        if (!this.shopRepository.addProduct(product, amount, price)) {
             throw new ProductExistsException();
         }
     }
 
     @Override
     public List<ShopProduct> getAllProductsStatus() {
-        return this.shopService.getAllProducts();
+        return this.shopRepository.getAllProducts();
     }
 }

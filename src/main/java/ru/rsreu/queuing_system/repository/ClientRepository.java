@@ -1,4 +1,4 @@
-package ru.rsreu.queuing_system.service;
+package ru.rsreu.queuing_system.repository;
 
 import ru.rsreu.queuing_system.model.Client;
 
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.ToDoubleBiFunction;
 
-public interface ClientService {
+public interface ClientRepository {
 
     void addClient(Client client);
 

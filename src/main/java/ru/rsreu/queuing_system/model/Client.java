@@ -10,7 +10,6 @@ public class Client {
     private String name;
     private double fundsAmount = 0;
     private double spentMoneyAmount = 0;
-    private List<ShopProduct> purchasedProducts = new ArrayList<>();
 
     public Client(String name) {
         this.id = UUID.randomUUID();
@@ -43,9 +42,5 @@ public class Client {
 
     public void setSpentMoneyAmount(double spentMoneyAmount) {
         this.spentMoneyAmount = spentMoneyAmount;
-    }
-
-    public List<ShopProduct> getPurchasedProducts() {
-        return this.purchasedProducts;
     }
 }

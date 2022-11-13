@@ -1,4 +1,4 @@
-package ru.rsreu.queuing_system.service;
+package ru.rsreu.queuing_system.repository;
 
 import ru.rsreu.queuing_system.model.Product;
 import ru.rsreu.queuing_system.model.ShopProduct;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.ToIntBiFunction;
 
-public interface ShopService {
+public interface ShopRepository {
 
     boolean addProduct(Product product, int amount, double price);
 
