@@ -82,7 +82,11 @@ public class StressTest {
         double shopBalance = shopRepo.getFundsAmount();
         double clientsBalance = 0;
         for (Client client : clients) {
-            clientsBalance += client.getSpentMoneyAmount();
+            try {
+                clientsBalance += shop.getClientStatus(client);
+            } catch (ClientNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         //double expectedSum = price * productAmount;
@@ -93,7 +97,7 @@ public class StressTest {
     @RepeatedTest(50)
     public void repeatedStressTest() throws ProductExistsException,
                                                 InterruptedException {
-        this.stressShopApiTest(100);
+        this.stressShopApiTest(10);
     }
 
 }
