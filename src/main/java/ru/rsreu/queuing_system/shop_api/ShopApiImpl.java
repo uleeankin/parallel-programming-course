@@ -11,7 +11,6 @@ import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;
 import ru.rsreu.queuing_system.repository.ClientRepository;
 import ru.rsreu.queuing_system.repository.ShopRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public class ShopApiImpl implements ShopApi {
@@ -118,7 +117,11 @@ public class ShopApiImpl implements ShopApi {
     }
 
     @Override
-    public List<ShopProduct> getAllProductsStatus() {
-        return this.shopRepository.getAllProducts();
+    public int getShopStatus() {
+        int amount = 0;
+        for (ShopProduct product : this.shopRepository.getAllProducts()) {
+            amount += product.getAmount();
+        }
+        return amount;
     }
 }

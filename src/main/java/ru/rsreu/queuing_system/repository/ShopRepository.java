@@ -21,6 +21,5 @@ public interface ShopRepository {
                                 int amount,
                                 ToIntBiFunction<Integer, Integer> func);
 
-
-
+    double getFundsAmount();
 }

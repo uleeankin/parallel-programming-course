@@ -29,6 +29,5 @@ public interface ShopApi {
     void createProduct(Product product, int count, double price)
         throws ProductExistsException;
 
-    List<ShopProduct> getAllProductsStatus();
-
+    int getShopStatus();
 }

@@ -56,9 +56,15 @@ public class ShopRepositoryImpl implements ShopRepository {
         if (foundProduct.isPresent()) {
             synchronized (foundProduct.get()) {
                 foundProduct.get().setAmount(
-                        foundProduct.get().getAmount() + amount);
+                        func.applyAsInt(
+                                foundProduct.get().getAmount(), amount));
             }
         }
         return foundProduct.isPresent();
+    }
+
+    @Override
+    public double getFundsAmount() {
+        return this.shop.getFundsAmount();
     }
 }
