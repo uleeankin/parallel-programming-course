@@ -9,7 +9,7 @@ import java.util.function.ToIntBiFunction;
 
 public interface ShopService {
 
-    ShopProduct addProduct(Product product, int amount, double price);
+    boolean addProduct(Product product, int amount, double price);
 
     double updateFundsAmount(double money);
 
@@ -17,7 +17,7 @@ public interface ShopService {
 
     Optional<ShopProduct> getProduct(Product product);
 
-    ShopProduct updateProductAmount(Product product,
+    boolean updateProductAmount(Product product,
                                 int amount,
                                 ToIntBiFunction<Integer, Integer> func);
 

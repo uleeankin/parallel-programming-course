@@ -14,37 +14,42 @@ public class ShopServiceImpl implements ShopService {
 
 
     @Override
-    public ShopProduct addProduct(Product product, int amount, double price) {
-        ShopProduct newProduct = new ShopProduct(product, amount, price);
-        shop.getProducts().add(newProduct);
-        return newProduct;
+    public boolean addProduct(Product product, int amount, double price) {
+        boolean operationResult = this.shop.getProducts()
+                                            .stream()
+                                            .noneMatch(
+                                                    p -> p.getProduct().equals(product));
+        if (operationResult) {
+            this.shop.getProducts().add(new ShopProduct(product, amount, price));
+        }
+        return operationResult;
     }
 
     @Override
     public double updateFundsAmount(double money) {
-        shop.setFundsAmount(shop.getFundsAmount() + money);
-        return shop.getFundsAmount();
+        this.shop.setFundsAmount(this.shop.getFundsAmount() + money);
+        return this.shop.getFundsAmount();
     }
 
     @Override
     public List<ShopProduct> getAllProducts() {
-        return shop.getProducts();
+        return this.shop.getProducts();
     }
 
     @Override
     public Optional<ShopProduct> getProduct(Product product) {
-        return shop.getProducts()
+        return this.shop.getProducts()
                 .stream()
                 .filter(p -> p.getProduct().equals(product))
                 .findFirst();
     }
 
     @Override
-    public ShopProduct updateProductAmount(Product product, int amount,
+    public boolean updateProductAmount(Product product, int amount,
                                        ToIntBiFunction<Integer, Integer> func) {
         Optional<ShopProduct> foundProduct = this.getProduct(product);
         foundProduct.ifPresent(shopProduct -> shopProduct.setAmount(
-                                shopProduct.getAmount() + amount));
-        return foundProduct.get();
+                shopProduct.getAmount() + amount));
+        return foundProduct.isPresent();
     }
 }
