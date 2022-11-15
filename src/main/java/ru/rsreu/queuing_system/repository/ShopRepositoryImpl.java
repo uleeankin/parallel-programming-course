@@ -38,15 +38,19 @@ public class ShopRepositoryImpl implements ShopRepository {
 
     @Override
     public List<ShopProduct> getAllProducts() {
-        return this.shop.getProducts();
+        synchronized (this.shop) {
+            return this.shop.getProducts();
+        }
     }
 
     @Override
     public Optional<ShopProduct> getProduct(Product product) {
-        return this.shop.getProducts()
-                .stream()
-                .filter(p -> p.getProduct().equals(product))
-                .findFirst();
+        synchronized (this.shop) {
+            return this.shop.getProducts()
+                    .stream()
+                    .filter(p -> p.getProduct().equals(product))
+                    .findFirst();
+        }
     }
 
     @Override

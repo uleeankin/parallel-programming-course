@@ -30,12 +30,12 @@ public class StressTest {
     ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
 
     @ParameterizedTest(name = "{index} - {0} stress test")
-    @ValueSource(ints = {5, 100, 1000, 5000})
+    @ValueSource(ints = {5, 100, 1000, 5000, 10000})
     public void stressShopApiTest(int clientsCount) throws ProductExistsException,
                                                                 InterruptedException {
 
         double price = 100.0;
-        int buyingProductAmount = 10;
+        int buyingProductAmount = 100;
         int purchasesNumber = 10;
 
         List<Client> clients = new ArrayList<>();
@@ -58,14 +58,12 @@ public class StressTest {
                         latch.countDown();
                         latch.await();
                         shop.buyProduct(client, product, buyingProductAmount);
-                    } catch (ClientNotFoundException e) {
-                        System.out.println("Client " + client.getName() + " not found");
-                    } catch (ProductNotFoundException e) {
-                        System.out.println("Product " + product.getName() + " not found");
                     } catch (InsufficientProductAmountException e) {
                         System.out.println("Not enough product " + product.getName());
                     } catch (InsufficientFundsAmountException e) {
                         System.out.println("Client " + client.getName() + " doesn't have enough money");
+                    }  catch (ClientNotFoundException | ProductNotFoundException e) {
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         throw new RuntimeException();

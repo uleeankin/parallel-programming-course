@@ -1,6 +1,7 @@
 package ru.rsreu;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
@@ -20,9 +21,9 @@ import ru.rsreu.queuing_system.shop_api.ShopApiImpl;
 
 public class ShopApiBaseLogicTest {
 
-    @ParameterizedTest(name = "{index} - {0} client creation test")
-    @ValueSource(ints = {10, 20, 30, 40, 50})
-    public void testClientCreation(int clientsAmount) {
+    @Test
+    public void testClientCreation() {
+        int clientsAmount = 100;
 
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
@@ -35,11 +36,11 @@ public class ShopApiBaseLogicTest {
         Assertions.assertEquals(clientsAmount, clientRepo.getAllClients().size());
     }
 
-    @ParameterizedTest(name = "{index} - {0} creation product test")
-    @ValueSource(ints = {10, 20, 30, 40, 50})
-    public void testCreationProducts(int productAmount)
+    @Test
+    public void testCreationProducts()
             throws ProductExistsException {
 
+        int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
@@ -51,11 +52,11 @@ public class ShopApiBaseLogicTest {
                 shopRepo.getProduct(product).get().getAmount());
     }
 
-    @ParameterizedTest(name = "{index} - {0} adding product test")
-    @ValueSource(ints = {10, 20, 30, 40, 50})
-    public void testExistedProductsAdding(int productAmount)
+    @Test
+    public void testExistedProductsAdding()
             throws ProductExistsException, ProductNotFoundException {
 
+        int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
@@ -70,15 +71,15 @@ public class ShopApiBaseLogicTest {
                 shopRepo.getProduct(product).get().getAmount());
     }
 
-    @ParameterizedTest(name = "{index} - {0} client status test")
-    @ValueSource(ints = {10, 20, 30, 40, 50})
-    public void testClientStatus(int buyingProductAmount)
+    @Test
+    public void testClientStatus()
             throws ProductExistsException,
             InsufficientProductAmountException,
             ClientNotFoundException,
             ProductNotFoundException,
             InsufficientFundsAmountException {
 
+        int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
@@ -96,15 +97,15 @@ public class ShopApiBaseLogicTest {
                 shop.getClientStatus(client));
     }
 
-    @ParameterizedTest(name = "{index} - {0} shop status test")
-    @ValueSource(ints = {10, 20, 30, 40, 50})
-    public void testShopStatus(int buyingProductAmount)
+    @Test
+    public void testShopStatus()
             throws ProductExistsException,
             InsufficientProductAmountException,
             ClientNotFoundException,
             ProductNotFoundException,
             InsufficientFundsAmountException {
 
+        int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
@@ -121,15 +122,15 @@ public class ShopApiBaseLogicTest {
         Assertions.assertEquals(0, shop.getShopStatus());
     }
 
-    @ParameterizedTest(name = "{index} - {0} balance test")
-    @ValueSource(ints = {100, 200, 300, 400, 500})
-    public void testBalance(int buyingProductAmount)
+    @Test
+    public void testBalance()
             throws ProductExistsException,
             InsufficientProductAmountException,
             ClientNotFoundException,
             ProductNotFoundException,
             InsufficientFundsAmountException {
 
+        int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);

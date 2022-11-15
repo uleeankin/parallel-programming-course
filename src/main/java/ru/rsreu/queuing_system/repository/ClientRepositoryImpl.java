@@ -20,12 +20,16 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public List<Client> getAllClients() {
-        return this.clients;
+        synchronized (this.clients) {
+            return this.clients;
+        }
     }
 
     @Override
     public Optional<Client> getClient(Client client) {
-        return this.clients.contains(client) ? Optional.of(client) : Optional.empty();
+        synchronized (this.clients) {
+            return this.clients.contains(client) ? Optional.of(client) : Optional.empty();
+        }
     }
 
     @Override
