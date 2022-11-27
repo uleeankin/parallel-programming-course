@@ -1,9 +1,7 @@
-package ru.rsreu;
+package ru.rsreu.queue_shop;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.client.InsufficientFundsAmountException;
 import ru.rsreu.queuing_system.exception.shop.InsufficientProductAmountException;
@@ -16,8 +14,8 @@ import ru.rsreu.queuing_system.repository.ClientRepository;
 import ru.rsreu.queuing_system.repository.ClientRepositoryImpl;
 import ru.rsreu.queuing_system.repository.ShopRepository;
 import ru.rsreu.queuing_system.repository.ShopRepositoryImpl;
+import ru.rsreu.queuing_system.shop_api.QueueShopApiImpl;
 import ru.rsreu.queuing_system.shop_api.ShopApi;
-import ru.rsreu.queuing_system.shop_api.ShopApiImpl;
 
 public class ShopApiBaseLogicTest {
 
@@ -27,7 +25,7 @@ public class ShopApiBaseLogicTest {
 
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         for (int i = 0; i < clientsAmount; i++) {
             shop.createClient("client" + i);
@@ -43,7 +41,7 @@ public class ShopApiBaseLogicTest {
         int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         shop.createProduct(product, productAmount, 100.0);
@@ -59,7 +57,7 @@ public class ShopApiBaseLogicTest {
         int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         int count = 10;
         Product product = new Product("chocolate", ProductType.FOOD);
@@ -82,7 +80,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -108,7 +106,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -133,7 +131,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new QueueShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -146,6 +144,6 @@ public class ShopApiBaseLogicTest {
 
         Assertions.assertEquals(price * buyingProductAmount,
                 clientRepo.getClient(client).get().getSpentMoneyAmount()
-                    + shopRepo.getFundsAmount());
+                        + shopRepo.getFundsAmount());
     }
 }

@@ -1,6 +1,9 @@
-package ru.rsreu;
+package ru.rsreu.simple_shop;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.client.InsufficientFundsAmountException;
 import ru.rsreu.queuing_system.exception.shop.InsufficientProductAmountException;
@@ -16,25 +19,44 @@ import ru.rsreu.queuing_system.repository.ShopRepositoryImpl;
 import ru.rsreu.queuing_system.shop_api.ShopApi;
 import ru.rsreu.queuing_system.shop_api.ShopApiImpl;
 
-public class ExceptionsTest {
+public class ShopApiBaseLogicTest {
 
-    @Test(expected = ProductNotFoundException.class)
-    public void testNonExistedProductsAdding()
-            throws ProductNotFoundException {
+    @Test
+    public void testClientCreation() {
+        int clientsAmount = 100;
 
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
 
-        Product product = new Product("chocolate", ProductType.FOOD);
+        for (int i = 0; i < clientsAmount; i++) {
+            shop.createClient("client" + i);
+        }
 
-        shop.addProduct(product, 10);
+        Assertions.assertEquals(clientsAmount, clientRepo.getAllClients().size());
     }
 
-    @Test(expected = ProductExistsException.class)
-    public void testExistedProductsCreation()
+    @Test
+    public void testCreationProducts()
+            throws ProductExistsException {
+
+        int productAmount = 100;
+        ClientRepository clientRepo = new ClientRepositoryImpl();
+        ShopRepository shopRepo = new ShopRepositoryImpl();
+        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+
+        Product product = new Product("chocolate", ProductType.FOOD);
+        shop.createProduct(product, productAmount, 100.0);
+
+        Assertions.assertEquals(productAmount,
+                shopRepo.getProduct(product).get().getAmount());
+    }
+
+    @Test
+    public void testExistedProductsAdding()
             throws ProductExistsException, ProductNotFoundException {
 
+        int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
@@ -43,54 +65,87 @@ public class ExceptionsTest {
         Product product = new Product("chocolate", ProductType.FOOD);
         shop.createProduct(product, count, 100.0);
 
-        shop.addProduct(product, count);
+        shop.addProduct(product, productAmount);
 
-        shop.createProduct(product, count * 2, 100.0);
+        Assertions.assertEquals(count + productAmount,
+                shopRepo.getProduct(product).get().getAmount());
     }
 
-    @Test(expected = InsufficientProductAmountException.class)
-    public void testInsufficientProductsAmount()
+    @Test
+    public void testClientStatus()
             throws ProductExistsException,
             InsufficientProductAmountException,
             ClientNotFoundException,
             ProductNotFoundException,
             InsufficientFundsAmountException {
 
+        int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
-        int buyingProductAmount = 10;
-        shop.createProduct(product, buyingProductAmount / 2, price);
+        shop.createProduct(product, buyingProductAmount, price);
 
         Client client = shop.createClient("client");
         clientRepo.updateFundsAmount(client, price * buyingProductAmount, Double::sum);
 
         shop.buyProduct(client, product, buyingProductAmount);
+
+        Assertions.assertEquals(price * buyingProductAmount,
+                shop.getClientStatus(client));
     }
 
-    @Test(expected = InsufficientFundsAmountException.class)
-    public void testInsufficientFundsAmount()
+    @Test
+    public void testShopStatus()
             throws ProductExistsException,
             InsufficientProductAmountException,
             ClientNotFoundException,
             ProductNotFoundException,
             InsufficientFundsAmountException {
 
+        int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
         ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
-        int buyingProductAmount = 10;
         shop.createProduct(product, buyingProductAmount, price);
 
         Client client = shop.createClient("client");
-        clientRepo.updateFundsAmount(client, price * buyingProductAmount / 2, Double::sum);
+        clientRepo.updateFundsAmount(client, price * buyingProductAmount, Double::sum);
 
         shop.buyProduct(client, product, buyingProductAmount);
+
+        Assertions.assertEquals(0, shop.getShopStatus());
+    }
+
+    @Test
+    public void testBalance()
+            throws ProductExistsException,
+            InsufficientProductAmountException,
+            ClientNotFoundException,
+            ProductNotFoundException,
+            InsufficientFundsAmountException {
+
+        int buyingProductAmount = 100;
+        ClientRepository clientRepo = new ClientRepositoryImpl();
+        ShopRepository shopRepo = new ShopRepositoryImpl();
+        ShopApi shop = new ShopApiImpl(clientRepo, shopRepo);
+
+        Product product = new Product("chocolate", ProductType.FOOD);
+        double price = 100.0;
+        shop.createProduct(product, buyingProductAmount, price);
+
+        Client client = shop.createClient("client");
+        clientRepo.updateFundsAmount(client, price * buyingProductAmount, Double::sum);
+
+        shop.buyProduct(client, product, buyingProductAmount / 2);
+
+        Assertions.assertEquals(price * buyingProductAmount,
+                clientRepo.getClient(client).get().getSpentMoneyAmount()
+                    + shopRepo.getFundsAmount());
     }
 }

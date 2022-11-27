@@ -69,6 +69,8 @@ public class ShopRepositoryImpl implements ShopRepository {
 
     @Override
     public double getFundsAmount() {
-        return this.shop.getFundsAmount();
+        synchronized (this.shop) {
+            return this.shop.getFundsAmount();
+        }
     }
 }
