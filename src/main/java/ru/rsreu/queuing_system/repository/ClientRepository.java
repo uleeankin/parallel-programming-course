@@ -1,6 +1,6 @@
 package ru.rsreu.queuing_system.repository;
 
-import ru.rsreu.queuing_system.model.Client;
+import ru.rsreu.queuing_system.model.base.Client;
 
 import java.util.List;
 import java.util.Optional;

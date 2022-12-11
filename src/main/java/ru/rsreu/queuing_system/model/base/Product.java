@@ -1,4 +1,4 @@
-package ru.rsreu.queuing_system.model;
+package ru.rsreu.queuing_system.model.base;
 
 import java.util.Objects;
 

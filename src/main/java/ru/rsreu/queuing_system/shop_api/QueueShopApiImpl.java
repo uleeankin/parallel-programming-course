@@ -4,17 +4,17 @@ import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.client.InsufficientFundsAmountException;
 import ru.rsreu.queuing_system.exception.shop.InsufficientProductAmountException;
 import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;
-import ru.rsreu.queuing_system.model.*;
+import ru.rsreu.queuing_system.model.base.*;
 import ru.rsreu.queuing_system.repository.ClientRepository;
 import ru.rsreu.queuing_system.repository.ShopRepository;
 
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class QueueShopApiImpl extends AbstractShopApi {
 
-    private final BlockingQueue<Order> orders = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Order> orders = new ArrayBlockingQueue<>(5000, true);
 
     public QueueShopApiImpl(ClientRepository clientRepository, ShopRepository shopRepository) {
         super(clientRepository, shopRepository);

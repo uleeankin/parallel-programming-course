@@ -2,9 +2,9 @@ package ru.rsreu.queuing_system.shop_api;
 
 import ru.rsreu.queuing_system.exception.client.InsufficientFundsAmountException;
 import ru.rsreu.queuing_system.exception.shop.InsufficientProductAmountException;
-import ru.rsreu.queuing_system.model.Client;
-import ru.rsreu.queuing_system.model.Product;
-import ru.rsreu.queuing_system.model.ShopProduct;
+import ru.rsreu.queuing_system.model.base.Client;
+import ru.rsreu.queuing_system.model.base.Product;
+import ru.rsreu.queuing_system.model.base.ShopProduct;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;
 import ru.rsreu.queuing_system.repository.ClientRepository;
@@ -12,9 +12,9 @@ import ru.rsreu.queuing_system.repository.ShopRepository;
 
 import java.util.Optional;
 
-public class ShopApiImpl extends AbstractShopApi {
+public class SimpleShopApiImpl extends AbstractShopApi {
 
-    public ShopApiImpl(ClientRepository clientRepository, ShopRepository shopRepository) {
+    public SimpleShopApiImpl(ClientRepository clientRepository, ShopRepository shopRepository) {
         super(clientRepository, shopRepository);
     }
 

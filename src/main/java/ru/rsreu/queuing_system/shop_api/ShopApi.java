@@ -2,8 +2,8 @@ package ru.rsreu.queuing_system.shop_api;
 
 import ru.rsreu.queuing_system.exception.client.InsufficientFundsAmountException;
 import ru.rsreu.queuing_system.exception.shop.InsufficientProductAmountException;
-import ru.rsreu.queuing_system.model.Client;
-import ru.rsreu.queuing_system.model.Product;
+import ru.rsreu.queuing_system.model.base.Client;
+import ru.rsreu.queuing_system.model.base.Product;
 import ru.rsreu.queuing_system.exception.client.ClientNotFoundException;
 import ru.rsreu.queuing_system.exception.shop.ProductExistsException;
 import ru.rsreu.queuing_system.exception.shop.ProductNotFoundException;

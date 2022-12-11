@@ -1,7 +1,7 @@
 package ru.rsreu.queuing_system.repository;
 
-import ru.rsreu.queuing_system.model.Product;
-import ru.rsreu.queuing_system.model.ShopProduct;
+import ru.rsreu.queuing_system.model.base.Product;
+import ru.rsreu.queuing_system.model.base.ShopProduct;
 
 import java.util.List;
 import java.util.Optional;

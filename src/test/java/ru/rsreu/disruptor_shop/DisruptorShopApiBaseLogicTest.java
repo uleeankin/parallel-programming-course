@@ -1,4 +1,4 @@
-package ru.rsreu.simple_shop;
+package ru.rsreu.disruptor_shop;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,10 @@ import ru.rsreu.queuing_system.repository.ClientRepository;
 import ru.rsreu.queuing_system.repository.ClientRepositoryImpl;
 import ru.rsreu.queuing_system.repository.ShopRepository;
 import ru.rsreu.queuing_system.repository.ShopRepositoryImpl;
+import ru.rsreu.queuing_system.shop_api.DisruptorShopApiImpl;
 import ru.rsreu.queuing_system.shop_api.ShopApi;
-import ru.rsreu.queuing_system.shop_api.SimpleShopApiImpl;
 
-public class ShopApiBaseLogicTest {
+public class DisruptorShopApiBaseLogicTest {
 
     @Test
     public void testClientCreation() {
@@ -25,7 +25,7 @@ public class ShopApiBaseLogicTest {
 
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         for (int i = 0; i < clientsAmount; i++) {
             shop.createClient("client" + i);
@@ -41,7 +41,7 @@ public class ShopApiBaseLogicTest {
         int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         shop.createProduct(product, productAmount, 100.0);
@@ -57,7 +57,7 @@ public class ShopApiBaseLogicTest {
         int productAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         int count = 10;
         Product product = new Product("chocolate", ProductType.FOOD);
@@ -80,7 +80,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -106,7 +106,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -131,7 +131,7 @@ public class ShopApiBaseLogicTest {
         int buyingProductAmount = 100;
         ClientRepository clientRepo = new ClientRepositoryImpl();
         ShopRepository shopRepo = new ShopRepositoryImpl();
-        ShopApi shop = new SimpleShopApiImpl(clientRepo, shopRepo);
+        ShopApi shop = new DisruptorShopApiImpl(clientRepo, shopRepo);
 
         Product product = new Product("chocolate", ProductType.FOOD);
         double price = 100.0;
@@ -144,6 +144,6 @@ public class ShopApiBaseLogicTest {
 
         Assertions.assertEquals(price * buyingProductAmount,
                 clientRepo.getClient(client).get().getSpentMoneyAmount()
-                    + shopRepo.getFundsAmount());
+                        + shopRepo.getFundsAmount());
     }
 }
